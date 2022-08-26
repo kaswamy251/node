@@ -5,27 +5,19 @@
    on: push
    jobs:
      
-     deploy:
-      name: Push to EC2 Instance
-      runs-on: ubuntu-latest
-
-      steps:
+      deploy:
+         name: Push to EC2 Instance
+         runs-on: ubuntu-latest
+         steps:
       
-      - name: Install Nginx
-      sudo: yes
-      apt: 
-        name: "nginx={{nginx_version}}"
-        state: present
-        update_cache: yes
-        cache_valid_time: 3600
-         
-      - name: Checkout the code
-        uses: actions/checkout@v1
-     - name: Deploy to my EC2 instance
-       uses: easingthemes/ssh-deploy@v2.1.5
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SOURCE: "./"
-          REMOTE_HOST: "ec2-54-236-55-32.compute-1.amazonaws.com"
-          REMOTE_USER: "ubuntu"
-          TARGET: "/home/ubuntu/SampleExpressApp"
+         - name: Checkout the code
+           uses: actions/checkout@v1
+      
+         - name: Deploy to my EC2 instance
+           uses: easingthemes/ssh-deploy@v2.1.5
+            env:
+            SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+            SOURCE: "./"
+            REMOTE_HOST: "ec2-54-236-55-32.compute-1.amazonaws.com"
+            REMOTE_USER: "ubuntu"
+            TARGET: "/home/ubuntu/SampleExpressApp"
