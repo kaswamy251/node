@@ -12,7 +12,11 @@
       
        - name: Checkout the code
          uses: actions/checkout@v1
-      
+       - name: Install Nginx
+         sudo: yes
+          apt:
+            name: "nginx={{nginx_version}}"
+            state: present
        - name: Deploy to my EC2 instance
          uses: easingthemes/ssh-deploy@v2.1.5
          env:
