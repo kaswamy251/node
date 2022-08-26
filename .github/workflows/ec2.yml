@@ -1,9 +1,43 @@
-name: Push-to-EC2
+- name: Adding APT repository key
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+  apt_key:
+    url: "http://nginx.org/keys/nginx_signing.key"
+  tags:
+    - nginx
+    - frontend
+    - repo
 
-on: push
+- name: Add official APT repository
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+  apt_repository:
+    repo: "deb http://nginx.org/packages/{{ansible_distribution|lower}}/ {{ansible_distribution_release}} nginx"
+  tags:
+    - nginx
+    - frontend
+    - repo
 
-jobs:
-  deploy:
+- name: Install Nginx
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+  apt: 
+    name: "nginx={{nginx_version}}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - nginx
+    - frontend
+    - deps
+   
+   
+- name: Push-to-EC2
+
+  on: push
+    
+    jobs:
+    deploy:
     name: Push to EC2 Instance
     runs-on: ubuntu-latest
 
